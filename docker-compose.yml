@@ -1,0 +1,8 @@
+version: '3'
+services:
+  platform-ruby:
+    container_name: platform-ruby
+    build:
+      context: .
+    volumes:
+      - .:/opt/platform-ruby
