@@ -1,0 +1,16 @@
+/*.gem
+/.bundle/
+/.envrc
+/.rspec_status
+/.ruby-gemset
+/.ruby-version
+/.rvmrc
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/Gemfile.lock
+/log/
+/pkg/
+/spec/reports/
+/tmp/
