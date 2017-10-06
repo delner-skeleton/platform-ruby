@@ -15,5 +15,11 @@ build-image:
 bash:
 	docker-compose run --rm platform-ruby /bin/bash
 
+console:
+	docker-compose run --rm platform-ruby ./bin/console
+
 rspec:
 	docker-compose run --rm platform-ruby bundle exec rspec
+
+rubocop:
+	docker-compose run --rm platform-ruby bundle exec rubocop
