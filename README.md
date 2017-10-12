@@ -12,15 +12,35 @@ It would *NOT* concern itself with actually persistence of order data to a datab
 
 ##### Generally speaking...
 
-It should contain business objects, service objects, and interfaces (NOT implementation) for inputs/outputs.
+**It should contain**:
 
-It should *NOT* contain:
+  - *Business objects*:
+
+    Ruby classes representing objects in your domain, equivalent to Rails models, but without the ActiveRecord/database stuff.
+
+  - *Service objects*:
+
+    A.k.a. interactors/use cases. These are 'actions' that often require the use of different kinds of business objects. Often have an associated `Request`/`Response` objects. Used primarly to decouple business objects, or to encapsulate complex logic that doesn't belong in business objects.
+
+    e.g. `PropertyTaxComputationService`: `Request` object is made from an `Assessment`, array of `TaxCredit`. Computes the final property tax bill, and returns a `Response` object with `total_deductions` and `total_owed`.
+
+  - Interfaces for inputs/outputs:
+
+    Define common interfaces for inputs/outputs from the library (but NOT implementation within those interfaces). These abstractions make it easier to design adapters and components in other gems that you can swap in to alter the behavior of the library.
+
+    e.g. An `OrderRepository` module, that gets and retrieves orders. The interface defines (but does not implement) `def find(id)` and `def save(order)`. One could then author adapter gems that implement this interface for specific datastores, such as a PostgresSQL, Cassandra, or Redis. These adapters would be interchangeable, and allow an engineer to easily configure a new datastore, without having to alter the library.
+
+**It should *NOT* contain**:
+
+Anything that doesn't directly concern your business domain or business logic. Particularly implementation details.
 
   - Routes, controllers, or other HTTP specific paradigms (see `platform-rails`)
   - Database implementation, such as ActiveRecord/SQL (see `platform-postgresql-ruby`)
   - Logging, event, or analytics implementation (see `logging-ruby`, `events-ruby`, `analytics-ruby`)
 
-The typical application flow, across components:
+Basically, if it's implementation for a named application, service or protocol, don't add it. Create an abstract interface for it here, then implement it in another gem which you can 'plug-in' to the library.
+
+##### A typical control flow through the library:
 
 ```
 --> Request object
